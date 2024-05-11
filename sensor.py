@@ -37,6 +37,10 @@ from .RenphoActiveBluetoothProcessorCoordinator import (
     RenphoPassiveBluetoothDataProcessor,
 )
 
+from homeassistant.components.bluetooth.active_update_processor import (
+    ActiveBluetoothProcessorCoordinator,
+)
+
 _LOGGER = logging.getLogger(__name__)
 
 SENSOR_DESCRIPTIONS = {
@@ -133,9 +137,7 @@ async def async_setup_entry(
 ) -> None:
     """Set up the Xiaomi BLE sensors."""
     _LOGGER.warning("*** sensor async_setup_entry:%s", entry)
-    coordinator: PassiveBluetoothProcessorCoordinator = hass.data[DOMAIN][
-        entry.entry_id
-    ]
+    coordinator: ActiveBluetoothProcessorCoordinator = hass.data[DOMAIN][entry.entry_id]
     processor = PassiveBluetoothDataProcessor(sensor_update_to_bluetooth_data_update)
     entry.async_on_unload(
         processor.async_add_entities_listener(
