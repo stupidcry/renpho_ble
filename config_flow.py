@@ -56,7 +56,7 @@ class RenphoConfigFlow(ConfigFlow, domain=DOMAIN):
         self._abort_if_unique_id_configured()
         device = DeviceData()
         # if not device.supported(discovery_info):
-        if "-001" not in discovery_info.name:
+        if "001" not in discovery_info.name:
             return self.async_abort(reason="not_supported")
 
         title = _title(discovery_info, device)
@@ -107,7 +107,7 @@ class RenphoConfigFlow(ConfigFlow, domain=DOMAIN):
                 continue
             device = DeviceData()
             # if device.supported(discovery_info):
-            if "-001" in discovery_info.name:
+            if "001" in discovery_info.name:
                 self._discovered_devices[address] = Discovery(
                     title=_title(discovery_info, device),
                     discovery_info=discovery_info,
