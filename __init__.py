@@ -17,6 +17,10 @@ from homeassistant.const import Platform
 from homeassistant.core import CoreState, HomeAssistant
 
 from .const import DOMAIN
+
+from homeassistant.components.bluetooth.active_update_processor import (
+    ActiveBluetoothProcessorCoordinator,
+)
 from .RenphoActiveBluetoothProcessorCoordinator import (
     RenphoActiveBluetoothProcessorCoordinator,
 )
@@ -74,8 +78,26 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         _LOGGER.warning("*** _update:%s", data)
         return SensorUpdate()
 
+    # coordinator = hass.data.setdefault(DOMAIN, {})[entry.entry_id] = (
+    #     RenphoActiveBluetoothProcessorCoordinator(
+    #         hass,
+    #         _LOGGER,
+    #         address=address,
+    #         mode=BluetoothScanningMode.PASSIVE,
+    #         update_method=data.update,
+    #         needs_poll_method=_needs_poll,
+    #         poll_method=_async_poll,
+    #         device_data=data,
+    #         discovered_event_classes=set(entry.data.get("known_events", [])),  ##??
+    #         # We will take advertisements from non-connectable devices
+    #         # since we will trade the BLEDevice for a connectable one
+    #         # if we need to poll it
+    #         connectable=False,
+    #         entry=entry,
+    #     )
+    # )
     coordinator = hass.data.setdefault(DOMAIN, {})[entry.entry_id] = (
-        RenphoActiveBluetoothProcessorCoordinator(
+        ActiveBluetoothProcessorCoordinator(
             hass,
             _LOGGER,
             address=address,
@@ -83,13 +105,10 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
             update_method=data.update,
             needs_poll_method=_needs_poll,
             poll_method=_async_poll,
-            device_data=data,
-            discovered_event_classes=set(entry.data.get("known_events", [])),  ##??
             # We will take advertisements from non-connectable devices
             # since we will trade the BLEDevice for a connectable one
             # if we need to poll it
             connectable=False,
-            entry=entry,
         )
     )
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)

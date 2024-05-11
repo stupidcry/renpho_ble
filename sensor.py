@@ -8,8 +8,10 @@ from sensor_state_data import DeviceClass, SensorUpdate, Units
 
 from homeassistant import config_entries
 from homeassistant.components.bluetooth.passive_update_processor import (
+    PassiveBluetoothProcessorCoordinator,
     PassiveBluetoothDataUpdate,
     PassiveBluetoothProcessorEntity,
+    PassiveBluetoothDataProcessor,
 )
 from homeassistant.components.sensor import (
     SensorDeviceClass,
@@ -131,12 +133,10 @@ async def async_setup_entry(
 ) -> None:
     """Set up the Xiaomi BLE sensors."""
     _LOGGER.warning("*** sensor async_setup_entry:%s", entry)
-    coordinator: RenphoActiveBluetoothProcessorCoordinator = hass.data[DOMAIN][
+    coordinator: PassiveBluetoothProcessorCoordinator = hass.data[DOMAIN][
         entry.entry_id
     ]
-    processor = RenphoPassiveBluetoothDataProcessor(
-        sensor_update_to_bluetooth_data_update
-    )
+    processor = PassiveBluetoothDataProcessor(sensor_update_to_bluetooth_data_update)
     entry.async_on_unload(
         processor.async_add_entities_listener(
             RenphoBluetoothSensorEntity, async_add_entities
@@ -148,7 +148,7 @@ async def async_setup_entry(
 
 
 class RenphoBluetoothSensorEntity(
-    PassiveBluetoothProcessorEntity[RenphoPassiveBluetoothDataProcessor],
+    PassiveBluetoothProcessorEntity[PassiveBluetoothDataProcessor],
     SensorEntity,
 ):
     """Representation of a xiaomi ble sensor."""
