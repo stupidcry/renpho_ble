@@ -28,6 +28,7 @@ class RenphoBluetoothDeviceData(BluetoothData):
         _LOGGER.warning("*** async_poll")
         client = await establish_connection(BleakClient, ble_device, ble_device.address)
         _LOGGER.warning("*** async_poll estab")
+        # 00001a12-0000-1000-8000-00805f9b34
         try:
             # battery_char = client.services.get_characteristic("")
             for service in client.services:
@@ -42,7 +43,7 @@ class RenphoBluetoothDeviceData(BluetoothData):
 
         self.set_device_sw_version("abcd")
         # self.update_predefined_sensor(SensorLibrary.BATTERY__PERCENTAGE, payload[0])
-        self.update_predefined_sensor(SensorLibrary.BATTERY__PERCENTAGE, 77)
+        # self.update_predefined_sensor(SensorLibrary.BATTERY__PERCENTAGE, 77)
         return self._finish_update()
 
     def _start_update(self, service_info: BluetoothServiceInfo) -> None:
