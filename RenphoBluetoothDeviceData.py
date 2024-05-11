@@ -39,8 +39,10 @@ class RenphoBluetoothDeviceData(BluetoothData):
             weight_char = client.services.get_characteristic(
                 "00001a12-0000-1000-8000-00805f9b34"
             )
-            payload = await client.read_gatt_char(weight_char)
-            _LOGGER.warning("*** payload:%s", payload)
+            # payload = await client.read_gatt_char(weight_char)
+            # _LOGGER.warning("*** payload:%s", payload)
+        except Exception:
+            _LOGGER.exception("*** except")
         finally:
             _LOGGER.warning("*** async_poll, disconnect")
             await client.disconnect()
