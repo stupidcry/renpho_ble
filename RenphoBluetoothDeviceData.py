@@ -30,13 +30,17 @@ class RenphoBluetoothDeviceData(BluetoothData):
         _LOGGER.warning("*** async_poll estab")
         # 00001a12-0000-1000-8000-00805f9b34
         try:
-            # battery_char = client.services.get_characteristic("")
             for service in client.services:
                 for characteristic in service.characteristics:
                     _LOGGER.warning(
                         "Service %s, Characteristic %s", service, characteristic
                     )
-            # payload = await client.read_gatt_char(battery_char)
+            #
+            weight_char = client.services.get_characteristic(
+                "00001a12-0000-1000-8000-00805f9b34"
+            )
+            payload = await client.read_gatt_char(weight_char)
+            _LOGGER.warning("*** payload:%s", payload)
         finally:
             _LOGGER.warning("*** async_poll, disconnect")
             await client.disconnect()
