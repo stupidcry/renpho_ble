@@ -40,7 +40,7 @@ class RenphoBluetoothDeviceData(BluetoothData):
             _LOGGER.warning("*** async_poll, disconnect")
             await client.disconnect()
 
-        self.set_device_sw_version("abcd".decode("utf-8"))
+        self.set_device_sw_version("abcd")
         # self.update_predefined_sensor(SensorLibrary.BATTERY__PERCENTAGE, payload[0])
         self.update_predefined_sensor(SensorLibrary.BATTERY__PERCENTAGE, 77)
         return self._finish_update()
